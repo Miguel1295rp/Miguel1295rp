@@ -1,0 +1,112 @@
+#Comandos de la Práctica 01
+# Miguel Ángel Rosas Paz
+
+
+# Parte I.
+ mkdir genomica_2020-2 && cd genomica_2020-2 && mkdir mrosas_p01 
+ mkdir data && mkdir filtered && mkdir raw_data && mkdir meta && mkdir scripts && mkdir figures && mkdir archive
+ mv filtered /home/genomica_2020-2/mrosas_p01/data #para mover filtered/ a data/
+ mv raw_data /home/genomica_2020-2/mrosas_p01/data #para mover raw_data/ a data/
+
+Respuesta 1: -bash
+Respuesta 4: por convención de algunos repositorios de datos, se recomienda organizar 
+los directorios de un proyecto bioinformático de esa forma pues permite la reproducibilidad de
+los análisis realizados, asi como el entendimiento de la estructura del trabajo.
+Cada uno de los nombres creados representa en sí la naturaleza de los archivos que se
+depositarán en cada directorio; data: contiene los datos [contiene los directorios filtered y raw_data, 
+que son los datos filtrados o curado y los datos crudos respectivamente]; meta: metadatos con información;
+Scripts: contiene losscripts usados en el análisis; archives: usado para hacer respaldos o guardar 
+archivos qu epodrían resultar o no útiles;  figures: scrips o recursos gráficos del análisis.
+
+# Parte II
+ touch delay.sh
+ vi delay.sh  #editor vi
+ #!/bin/bash
+ echo "Después de la Parte I. necesito 1/2 minuto de descanso, que son exactamente 30 segundos."
+
+ echo "Ahora sí, con todo!"
+ chmod u+x delay.sh
+ ./delay.sh
+ #!/bin/bash
+ echo "Después de la Parte I. necesito 1/2 minuto de descanso, que son exactamente 30 segundos."
+ sleep 30
+ echo "Ahora sí, con todo!"
+
+Respuesta 3: Observación: al ejecutar el archivo delay.sh se imprime la primera linea que dice:
+"Después de la Parte I. necesito 1/2 minuto de descanso, que son exactamente 30 segundos."
+posteriormente se queda esperando por 30 segundos, que es lo que se esperaba al teclear el 
+comando "sleep 30". Una vez pasado el lapso de tiempo, se imprimió el texto faltante:
+"Ahora sí, con todo!".
+
+Respuesta 4: en el caso hipotético de excribir 300 en lugar de 30 y haberlo ejecutado, sólo basta con teclear "ctrl+c" para frenar el proceso
+
+# Parte III
+
+ mv sequence.fasta sequence.gff3 sequence_1.fasta sequence_2.fasta sequence_3.fasta sra_data.fasta.gz sra_data.fastq.gz /home/genomica_2020-2/mrosas_p01/data/raw_data/
+
+Respuesta 1: La clasificación del coronavirus actual lo ubica en el grupo de beta coronavirus, que infectan a mamíferos. A través de la secuenciación del genoma 
+de este virus, se pudo identificar la estructura del genoma, que está constituido por un marco de lectura abierto que codifica para poliproteínas no estructurales, 
+proteína S (S1 yS2 [spike]) y proteína N. SARS-CoV-2 es una virus de ssRNA con espículas de proteína S. Esta proteína S es la que media la fusión de la membrana del 
+virus con la de la célula hospedera mediante su unión a la enzima convertidora de angiotesina 2. 
+
+Respuesta 2: A grandes rasgos, la funcion del ectodominio spike de SARS-COV-2 es el reconocimiento a la célula del hospedero. Es un conmplejo proteíco
+que permite le a la partícula virica ingresar al interior celular mediante el reconocimiento selectivo de receptores de membrana de la célula hospedera.
+# Parte IV
+
+ ln sequence.fasta sequence.gff3 sequence_1.fasta sequence_2.fasta sequence_3.fasta sra_data.fasta.gz sra_data.fastq.gz  /home/genomica_2020-2/mrosas_p01/data/filtered/
+ mkdir proteins | mv sequence_1.fasta sequence_2.fasta sequence_3.fasta /home/genomica_2020-2/mrosas_p01/data/filtered/proteins/
+ touch glycoproteins.faa
+ less sequence_1.fasta | head -2
+>pdb|6VYB|C Chain C, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+ less sequence_2.fasta | head -2
+>pdb|6VYB|B Chain B, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+ less sequence_3.fasta | head -2
+>pdb|6VYB|A Chain A, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+ less sequence_3.fasta sequence_2.fasta sequence_1.fasta > glycoprotein.faa
+ less sequence.fasta |head -5
+>NC_045512.2 Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+ATTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAA
+CGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAAC
+TAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTG
+
+ $ zless sra_data.fasta.gz | head -5
+>SRR11241254.1.1 1 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
+>SRR11241254.2.1 2 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
+>SRR11241254.3.1 3 length=40
+
+ zless sequence.fasta | grep -i '>' | wc -l
+	Resultado: 1
+ zless sra_data.fasta.gz | grep -i '>' | wc -l
+	Resultado: 131950
+
+ zless sra_data.fastq.gz | head -12
+@SRR11241254.1.1 1 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.1.1 1 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+@SRR11241254.2.1 2 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.2.1 2 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+@SRR11241254.3.1 3 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.3.1 3 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
+ zless sra_data.fastq.gz | grep + | wc -l
+Respuesta 7: 133774
+
+Respuesta 8: la diferencia esta en los identificadores que usan  y . faa es una extensión de archivos fasta
+Son de nucleótidos. La diferencia se explica en la discriminación de algunos comonentes del archivo en uno de los formatos
+.fastqc es un formato utilizado para evaluar la calidad de las secuencias y cada linea en él representa si la secuencia es de buena calidad o de mala calidad 
+
+Respuesta 9: less -S sequence.gff3 nos permite ver la informacion de cada ID en una linea 
+
+Respuesta 10: 
+ awk '$3 =="gene" {print $1, $3}' sequence.gff3 | wc -l
+11
